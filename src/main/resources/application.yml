@@ -1,23 +1,20 @@
 spring:
   application:
     name: quality-compliance
-
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
   data:
     mongodb:
-      uri: ${MONGODB_URI:mongodb://localhost:27017/quality_compliance}
-
+      uri: ${MONGODB_URI:mongodb://localhost:27017/quality}
+      auto-index-creation: true
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: io.cloudevents.kafka.CloudEventSerializer
-    consumer:
-      group-id: quality-compliance
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: io.cloudevents.kafka.CloudEventDeserializer
 
 server:
-  port: 8098
+  port: ${SERVER_PORT:8098}
 
 management:
   endpoints:
@@ -29,7 +26,38 @@ management:
       prometheus:
         enabled: true
 
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+
+quality:
+  events:
+    topic: quality.events
+  inspection:
+    default-sampling: AQL_2_5
+    weight-tolerance-percent: 2.0
+    photo-required-for-defects: true
+  compliance:
+    critical-immediate-action: true
+    capa-deadline-hours: 48
+  spc:
+    control-chart-sigma: 3
+    min-data-points: 20
+
 logging:
   level:
     root: INFO
-    com.paklog.quality.compliance: DEBUG
+    com.paklog.quality: DEBUG
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  data:
+    mongodb:
+      uri: mongodb://mongodb:27017/quality
+  kafka:
+    bootstrap-servers: kafka:9092
