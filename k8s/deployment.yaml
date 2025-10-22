@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quality-compliance
+  namespace: paklog-core
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: quality-compliance
+  template:
+    metadata:
+      labels:
+        app: quality-compliance
+    spec:
+      containers:
+      - name: quality-compliance
+        image: paklog/quality-compliance:latest
+        ports:
+        - containerPort: 8098
+        env:
+        - name: SPRING_PROFILES_ACTIVE
+          value: "production"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: quality-compliance
+  namespace: paklog-core
+spec:
+  selector:
+    app: quality-compliance
+  ports:
+  - port: 8098
+    targetPort: 8098
