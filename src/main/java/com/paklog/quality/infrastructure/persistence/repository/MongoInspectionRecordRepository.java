@@ -3,17 +3,19 @@ package com.paklog.quality.infrastructure.persistence.repository;
 import com.paklog.quality.domain.aggregate.InspectionRecord;
 import com.paklog.quality.domain.repository.InspectionRecordRepository;
 import com.paklog.quality.domain.valueobject.*;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.*;
 import org.springframework.stereotype.Repository;
 import java.util.*;
 
 @Repository
-@RequiredArgsConstructor
 public class MongoInspectionRecordRepository implements InspectionRecordRepository {
 
     private final MongoTemplate mongoTemplate;
+    public MongoInspectionRecordRepository(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
+
 
     @Override
     public InspectionRecord save(InspectionRecord record) {

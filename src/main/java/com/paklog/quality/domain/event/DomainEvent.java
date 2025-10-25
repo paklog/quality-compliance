@@ -1,9 +1,7 @@
 package com.paklog.quality.domain.event;
 
-import lombok.Data;
 import java.time.Instant;
 
-@Data
 public abstract class DomainEvent {
     private final String eventId;
     private final Instant occurredAt;
@@ -14,4 +12,12 @@ public abstract class DomainEvent {
     }
 
     public abstract String getEventType();
+
+    public String getEventId() {
+        return eventId;
+    }
+
+    public Instant getOccurredAt() {
+        return occurredAt;
+    }
 }

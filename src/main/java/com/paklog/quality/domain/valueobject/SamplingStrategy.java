@@ -1,8 +1,6 @@
 package com.paklog.quality.domain.valueobject;
 
-import lombok.Getter;
 
-@Getter
 public enum SamplingStrategy {
     FULL_INSPECTION(100.0),      // 100%
     AQL_2_5(2.5),                // AQL 2.5%

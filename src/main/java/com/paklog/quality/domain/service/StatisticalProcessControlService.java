@@ -1,7 +1,7 @@
 package com.paklog.quality.domain.service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import lombok.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
@@ -9,9 +9,10 @@ import java.util.*;
  * Statistical Process Control (SPC) service
  * Implements control charts and process capability analysis
  */
-@Slf4j
 @Service
 public class StatisticalProcessControlService {
+    private static final Logger log = LoggerFactory.getLogger(StatisticalProcessControlService.class);
+
 
     /**
      * Calculate SPC metrics for a data series
@@ -159,27 +160,167 @@ public class StatisticalProcessControlService {
         }
     }
 
-    @Data
-    @Builder
     public static class SPCMetrics {
-        private double mean;
-        private double standardDeviation;
-        private double upperControlLimit;
-        private double lowerControlLimit;
-        private int dataPoints;
-        private List<String> violations;
-        private boolean inControl;
+        private final double mean;
+        private final double standardDeviation;
+        private final double upperControlLimit;
+        private final double lowerControlLimit;
+        private final int dataPoints;
+        private final List<String> violations;
+        private final boolean inControl;
+
+        private SPCMetrics(Builder builder) {
+            this.mean = builder.mean;
+            this.standardDeviation = builder.standardDeviation;
+            this.upperControlLimit = builder.upperControlLimit;
+            this.lowerControlLimit = builder.lowerControlLimit;
+            this.dataPoints = builder.dataPoints;
+            this.violations = builder.violations;
+            this.inControl = builder.inControl;
+        }
+
+        public static Builder builder() {
+            return new Builder();
+        }
+
+        // Getters
+        public double getMean() { return mean; }
+        public double getStandardDeviation() { return standardDeviation; }
+        public double getUpperControlLimit() { return upperControlLimit; }
+        public double getLowerControlLimit() { return lowerControlLimit; }
+        public int getDataPoints() { return dataPoints; }
+        public List<String> getViolations() { return violations; }
+        public boolean isInControl() { return inControl; }
+
+        public static class Builder {
+            private double mean;
+            private double standardDeviation;
+            private double upperControlLimit;
+            private double lowerControlLimit;
+            private int dataPoints;
+            private List<String> violations;
+            private boolean inControl;
+
+            public Builder mean(double mean) {
+                this.mean = mean;
+                return this;
+            }
+
+            public Builder standardDeviation(double standardDeviation) {
+                this.standardDeviation = standardDeviation;
+                return this;
+            }
+
+            public Builder upperControlLimit(double upperControlLimit) {
+                this.upperControlLimit = upperControlLimit;
+                return this;
+            }
+
+            public Builder lowerControlLimit(double lowerControlLimit) {
+                this.lowerControlLimit = lowerControlLimit;
+                return this;
+            }
+
+            public Builder dataPoints(int dataPoints) {
+                this.dataPoints = dataPoints;
+                return this;
+            }
+
+            public Builder violations(List<String> violations) {
+                this.violations = violations;
+                return this;
+            }
+
+            public Builder inControl(boolean inControl) {
+                this.inControl = inControl;
+                return this;
+            }
+
+            public SPCMetrics build() {
+                return new SPCMetrics(this);
+            }
+        }
     }
 
-    @Data
-    @Builder
     public static class ProcessCapability {
-        private double cp;
-        private double cpk;
-        private double mean;
-        private double standardDeviation;
-        private double lowerSpecLimit;
-        private double upperSpecLimit;
-        private String capability;
+        private final double cp;
+        private final double cpk;
+        private final double mean;
+        private final double standardDeviation;
+        private final double lowerSpecLimit;
+        private final double upperSpecLimit;
+        private final String capability;
+
+        private ProcessCapability(Builder builder) {
+            this.cp = builder.cp;
+            this.cpk = builder.cpk;
+            this.mean = builder.mean;
+            this.standardDeviation = builder.standardDeviation;
+            this.lowerSpecLimit = builder.lowerSpecLimit;
+            this.upperSpecLimit = builder.upperSpecLimit;
+            this.capability = builder.capability;
+        }
+
+        public static Builder builder() {
+            return new Builder();
+        }
+
+        // Getters
+        public double getCp() { return cp; }
+        public double getCpk() { return cpk; }
+        public double getMean() { return mean; }
+        public double getStandardDeviation() { return standardDeviation; }
+        public double getLowerSpecLimit() { return lowerSpecLimit; }
+        public double getUpperSpecLimit() { return upperSpecLimit; }
+        public String getCapability() { return capability; }
+
+        public static class Builder {
+            private double cp;
+            private double cpk;
+            private double mean;
+            private double standardDeviation;
+            private double lowerSpecLimit;
+            private double upperSpecLimit;
+            private String capability;
+
+            public Builder cp(double cp) {
+                this.cp = cp;
+                return this;
+            }
+
+            public Builder cpk(double cpk) {
+                this.cpk = cpk;
+                return this;
+            }
+
+            public Builder mean(double mean) {
+                this.mean = mean;
+                return this;
+            }
+
+            public Builder standardDeviation(double standardDeviation) {
+                this.standardDeviation = standardDeviation;
+                return this;
+            }
+
+            public Builder lowerSpecLimit(double lowerSpecLimit) {
+                this.lowerSpecLimit = lowerSpecLimit;
+                return this;
+            }
+
+            public Builder upperSpecLimit(double upperSpecLimit) {
+                this.upperSpecLimit = upperSpecLimit;
+                return this;
+            }
+
+            public Builder capability(String capability) {
+                this.capability = capability;
+                return this;
+            }
+
+            public ProcessCapability build() {
+                return new ProcessCapability(this);
+            }
+        }
     }
 }

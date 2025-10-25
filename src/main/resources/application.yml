@@ -34,7 +34,7 @@ springdoc:
 
 quality:
   events:
-    topic: quality.events
+    topic: support-intelligence.quality-compliance.events
   inspection:
     default-sampling: AQL_2_5
     weight-tolerance-percent: 2.0

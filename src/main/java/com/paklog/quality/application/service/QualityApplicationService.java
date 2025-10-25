@@ -1,4 +1,6 @@
 package com.paklog.quality.application.service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.paklog.quality.application.command.PerformInspectionCommand;
 import com.paklog.quality.application.port.in.QualityControlUseCase;
@@ -6,38 +8,43 @@ import com.paklog.quality.application.port.out.PublishEventPort;
 import com.paklog.quality.domain.aggregate.*;
 import com.paklog.quality.domain.repository.*;
 import com.paklog.quality.domain.service.*;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.*;
 
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class QualityApplicationService implements QualityControlUseCase {
+    private static final Logger log = LoggerFactory.getLogger(QualityApplicationService.class);
+
 
     private final InspectionRecordRepository inspectionRepository;
     private final ComplianceRuleRepository ruleRepository;
     private final RuleEvaluationService ruleEvaluationService;
     private final PublishEventPort publishEventPort;
+    public QualityApplicationService(InspectionRecordRepository inspectionRepository, ComplianceRuleRepository ruleRepository, RuleEvaluationService ruleEvaluationService, PublishEventPort publishEventPort) {
+        this.inspectionRepository = inspectionRepository;
+        this.ruleRepository = ruleRepository;
+        this.ruleEvaluationService = ruleEvaluationService;
+        this.publishEventPort = publishEventPort;
+    }
+
 
     @Override
     @Transactional
     public String performInspection(PerformInspectionCommand command) {
-        log.info("Performing {} inspection", command.getType());
+        log.info("Performing {} inspection", command.type());
 
         InspectionRecord inspection = InspectionRecord.builder()
             .id(UUID.randomUUID().toString())
             .inspectionNumber("INS-" + Instant.now().getEpochSecond())
-            .type(command.getType())
-            .itemId(command.getItemId())
-            .inspectorId(command.getInspectorId())
-            .samplingStrategy(command.getSamplingStrategy())
-            .sampleSize(command.getSampleSize())
-            .orderId(command.getOrderId())
-            .shipmentId(command.getShipmentId())
+            .type(command.type())
+            .itemId(command.itemId())
+            .inspectorId(command.inspectorId())
+            .samplingStrategy(command.samplingStrategy())
+            .sampleSize(command.sampleSize())
+            .orderId(command.orderId())
+            .shipmentId(command.shipmentId())
             .build();
 
         inspection.perform();
@@ -56,7 +63,7 @@ public class QualityApplicationService implements QualityControlUseCase {
         inspection.addDefect(defect);
         inspectionRepository.save(inspection);
 
-        inspection.getDomainEvents().forEach(publishEventPort::publish);
+        inspection.domainEvents().forEach(publishEventPort::publish);
         inspection.clearDomainEvents();
     }
 
@@ -78,7 +85,7 @@ public class QualityApplicationService implements QualityControlUseCase {
         inspection.complete();
         inspectionRepository.save(inspection);
 
-        inspection.getDomainEvents().forEach(publishEventPort::publish);
+        inspection.domainEvents().forEach(publishEventPort::publish);
         inspection.clearDomainEvents();
     }
 

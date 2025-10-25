@@ -1,19 +1,19 @@
 package com.paklog.quality.domain.service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.paklog.quality.domain.aggregate.*;
 import com.paklog.quality.domain.valueobject.*;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
  * Rule evaluation engine for quality compliance
  */
-@Slf4j
 @Service
-@RequiredArgsConstructor
 public class RuleEvaluationService {
+    private static final Logger log = LoggerFactory.getLogger(RuleEvaluationService.class);
+
 
     /**
      * Evaluate all applicable rules for an inspection
@@ -76,14 +76,76 @@ public class RuleEvaluationService {
         return data;
     }
 
-    @lombok.Data
-    @lombok.Builder
     public static class RuleEvaluationResult {
-        private int totalRules;
-        private int passedRules;
-        private int failedRules;
-        private int criticalFailures;
-        private List<ComplianceRule> failedRuleDetails;
-        private boolean overallPassed;
+        private final int totalRules;
+        private final int passedRules;
+        private final int failedRules;
+        private final int criticalFailures;
+        private final List<ComplianceRule> failedRuleDetails;
+        private final boolean overallPassed;
+
+        private RuleEvaluationResult(Builder builder) {
+            this.totalRules = builder.totalRules;
+            this.passedRules = builder.passedRules;
+            this.failedRules = builder.failedRules;
+            this.criticalFailures = builder.criticalFailures;
+            this.failedRuleDetails = builder.failedRuleDetails;
+            this.overallPassed = builder.overallPassed;
+        }
+
+        public static Builder builder() {
+            return new Builder();
+        }
+
+        // Getters
+        public int getTotalRules() { return totalRules; }
+        public int getPassedRules() { return passedRules; }
+        public int getFailedRules() { return failedRules; }
+        public int getCriticalFailures() { return criticalFailures; }
+        public List<ComplianceRule> getFailedRuleDetails() { return failedRuleDetails; }
+        public boolean isOverallPassed() { return overallPassed; }
+
+        public static class Builder {
+            private int totalRules;
+            private int passedRules;
+            private int failedRules;
+            private int criticalFailures;
+            private List<ComplianceRule> failedRuleDetails;
+            private boolean overallPassed;
+
+            public Builder totalRules(int totalRules) {
+                this.totalRules = totalRules;
+                return this;
+            }
+
+            public Builder passedRules(int passedRules) {
+                this.passedRules = passedRules;
+                return this;
+            }
+
+            public Builder failedRules(int failedRules) {
+                this.failedRules = failedRules;
+                return this;
+            }
+
+            public Builder criticalFailures(int criticalFailures) {
+                this.criticalFailures = criticalFailures;
+                return this;
+            }
+
+            public Builder failedRuleDetails(List<ComplianceRule> failedRuleDetails) {
+                this.failedRuleDetails = failedRuleDetails;
+                return this;
+            }
+
+            public Builder overallPassed(boolean overallPassed) {
+                this.overallPassed = overallPassed;
+                return this;
+            }
+
+            public RuleEvaluationResult build() {
+                return new RuleEvaluationResult(this);
+            }
+        }
     }
 }

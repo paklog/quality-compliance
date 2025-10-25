@@ -1,24 +1,28 @@
 package com.paklog.quality.infrastructure.web.controller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.paklog.quality.application.command.PerformInspectionCommand;
 import com.paklog.quality.application.port.in.QualityControlUseCase;
 import com.paklog.quality.domain.aggregate.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/v1/quality")
-@RequiredArgsConstructor
 @Tag(name = "Quality Control", description = "Quality control and compliance")
 public class QualityController {
+    private static final Logger log = LoggerFactory.getLogger(QualityController.class);
+
 
     private final QualityControlUseCase qualityUseCase;
+    public QualityController(QualityControlUseCase qualityUseCase) {
+        this.qualityUseCase = qualityUseCase;
+    }
+
 
     @PostMapping("/inspections")
     @Operation(summary = "Perform inspection")

@@ -1,23 +1,20 @@
 package com.paklog.quality.application.command;
 
-import com.paklog.quality.domain.valueobject.*;
-import lombok.*;
-import javax.validation.constraints.*;
+import com.paklog.quality.domain.valueobject.InspectionType;
+import com.paklog.quality.domain.valueobject.SamplingStrategy;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class PerformInspectionCommand {
+public record PerformInspectionCommand(
     @NotNull
-    private InspectionType type;
+    InspectionType type,
     @NotBlank
-    private String itemId;
+    String itemId,
     @NotBlank
-    private String inspectorId;
+    String inspectorId,
     @NotNull
-    private SamplingStrategy samplingStrategy;
-    private int sampleSize;
-    private String orderId;
-    private String shipmentId;
-}
+    SamplingStrategy samplingStrategy,
+    int sampleSize,
+    String orderId,
+    String shipmentId
+) {}

@@ -22,9 +22,7 @@
 
     <properties>
         <java.version>21</java.version>
-        <cloudevents.version>2.5.0</cloudevents.version>
-        <mapstruct.version>1.5.5.Final</mapstruct.version>
-        <testcontainers.version>1.19.3</testcontainers.version>
+        <cloudevents.version>2.5.0</cloudevents.version>        <testcontainers.version>1.19.3</testcontainers.version>
     </properties>
 
     <dependencies>
@@ -76,11 +74,7 @@
         </dependency>
 
         <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
+        
 
         <!-- Testing -->
         <dependency>
